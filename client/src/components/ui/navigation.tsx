@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { RESTAURANT_INFO } from "@/lib/constants";
 
@@ -15,6 +15,18 @@ const NAV_ITEMS = [
 export function Navigation() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark");
+  };
 
   const NavLinks = () => (
     <>
@@ -41,6 +53,13 @@ export function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-4">
             <NavLinks />
+            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              {theme === "light" ? (
+                <Moon className="h-5 w-5" />
+              ) : (
+                <Sun className="h-5 w-5" />
+              )}
+            </Button>
           </div>
 
           {/* Mobile Navigation */}
@@ -53,6 +72,13 @@ export function Navigation() {
             <SheetContent>
               <div className="flex flex-col space-y-4 mt-8">
                 <NavLinks />
+                <Button variant="ghost" size="icon" onClick={toggleTheme}>
+                  {theme === "light" ? (
+                    <Moon className="h-5 w-5" />
+                  ) : (
+                    <Sun className="h-5 w-5" />
+                  )}
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
