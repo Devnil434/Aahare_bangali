@@ -103,7 +103,7 @@ export default function Contact() {
 
           <div className="mt-8 h-[300px] bg-muted rounded-lg overflow-hidden">
             <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(RESTAURANT_INFO.address)}`}
+              src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(RESTAURANT_INFO.address)}`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
