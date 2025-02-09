@@ -11,10 +11,10 @@ export const RESERVATION_TIMES = [
 ];
 
 export const RESTAURANT_INFO = {
-  name: "Culinary Haven",
+  name: "Aahare Bangali",
   address: "123 Gourmet Street, Foodie City",
   phone: "(555) 123-4567",
-  email: "info@culinaryhaven.com",
+  email: "info@aaharebangali.com",
   hours: {
     mon_fri: "5:00 PM - 10:00 PM",
     sat_sun: "4:00 PM - 11:00 PM"
