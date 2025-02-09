@@ -18,7 +18,7 @@ function MenuItemCard({ item }: { item: MenuItem }) {
       <CardHeader>
         <div className="flex justify-between items-start">
           <CardTitle>{item.name}</CardTitle>
-          <span className="font-bold">${(item.price / 100).toFixed(2)}</span>
+          <span className="font-bold">₹{item.price}</span>
         </div>
       </CardHeader>
       <CardContent>
