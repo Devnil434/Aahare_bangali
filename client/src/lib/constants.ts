@@ -12,7 +12,7 @@ export const RESERVATION_TIMES = [
 
 export const RESTAURANT_INFO = {
   name: "Aahare Bangali",
-  address: "123 Gourmet Street, Foodie City",
+  address: "Gate No. 2, Major Arterial Road, Biswa Bangla Sarani, New Town, Kolkata, West Bengal 700156, India",
   phone: "(555) 123-4567",
   email: "info@aaharebangali.com",
   hours: {
