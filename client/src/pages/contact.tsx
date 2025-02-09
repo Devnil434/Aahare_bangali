@@ -101,16 +101,17 @@ export default function Contact() {
             </Card>
           </div>
 
-          <div className="mt-8 h-[300px] bg-muted rounded-lg">
-            {/* Google Maps iframe would go here */}
+          <div className="mt-8 h-[300px] bg-muted rounded-lg overflow-hidden">
             <iframe
-              src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${RESTAURANT_INFO.location.lat},${RESTAURANT_INFO.location.lng}`}
+              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(RESTAURANT_INFO.address)}`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
+              title="Restaurant Location"
+              className="rounded-lg"
             />
           </div>
         </div>
