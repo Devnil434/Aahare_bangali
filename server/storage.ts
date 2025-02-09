@@ -5,93 +5,65 @@ import {
   type InsertReservation,
   type ContactMessage,
   type InsertContactMessage,
+  menuItems,
+  reservations,
+  contactMessages,
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Menu items
   getMenuItems(): Promise<MenuItem[]>;
   getMenuItemsByCategory(category: string): Promise<MenuItem[]>;
   createMenuItem(item: InsertMenuItem): Promise<MenuItem>;
-  
+
   // Reservations
   createReservation(reservation: InsertReservation): Promise<Reservation>;
   getReservation(id: number): Promise<Reservation | undefined>;
-  
+
   // Contact messages
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
 }
 
-export class MemStorage implements IStorage {
-  private menuItems: Map<number, MenuItem>;
-  private reservations: Map<number, Reservation>;
-  private contactMessages: Map<number, ContactMessage>;
-  private currentMenuId: number = 1;
-  private currentReservationId: number = 1;
-  private currentMessageId: number = 1;
-
-  constructor() {
-    this.menuItems = new Map();
-    this.reservations = new Map();
-    this.contactMessages = new Map();
-    this.initializeMenuItems();
-  }
-
-  private initializeMenuItems() {
-    const items: InsertMenuItem[] = [
-      {
-        name: "Classic Burger",
-        description: "Juicy beef patty with fresh lettuce and tomato",
-        price: 1499,
-        category: "main",
-        imageUrl: "https://images.unsplash.com/photo-1564844536311-de546a28c87d",
-      },
-      {
-        name: "Caesar Salad",
-        description: "Crisp romaine lettuce with parmesan and croutons",
-        price: 999,
-        category: "starters",
-        imageUrl: "https://images.unsplash.com/photo-1503767849114-976b67568b02",
-      },
-      // Add more sample menu items as needed
-    ];
-
-    items.forEach(item => this.createMenuItem(item));
-  }
-
+export class DatabaseStorage implements IStorage {
   async getMenuItems(): Promise<MenuItem[]> {
-    return Array.from(this.menuItems.values());
+    return await db.select().from(menuItems);
   }
 
   async getMenuItemsByCategory(category: string): Promise<MenuItem[]> {
-    return Array.from(this.menuItems.values()).filter(
-      item => item.category === category
-    );
+    return await db.select().from(menuItems).where(eq(menuItems.category, category));
   }
 
   async createMenuItem(item: InsertMenuItem): Promise<MenuItem> {
-    const id = this.currentMenuId++;
-    const menuItem = { ...item, id };
-    this.menuItems.set(id, menuItem);
+    const [menuItem] = await db.insert(menuItems).values(item).returning();
     return menuItem;
   }
 
   async createReservation(reservation: InsertReservation): Promise<Reservation> {
-    const id = this.currentReservationId++;
-    const newReservation = { ...reservation, id, status: "pending" };
-    this.reservations.set(id, newReservation);
+    const [newReservation] = await db
+      .insert(reservations)
+      .values({ ...reservation, status: "pending" })
+      .returning();
     return newReservation;
   }
 
   async getReservation(id: number): Promise<Reservation | undefined> {
-    return this.reservations.get(id);
+    const [reservation] = await db
+      .select()
+      .from(reservations)
+      .where(eq(reservations.id, id));
+    return reservation;
   }
 
   async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
-    const id = this.currentMessageId++;
-    const newMessage = { ...message, id, createdAt: new Date() };
-    this.contactMessages.set(id, newMessage);
+    const [newMessage] = await db
+      .insert(contactMessages)
+      .values(message)
+      .returning();
     return newMessage;
   }
 }
 
-export const storage = new MemStorage();
+// Switch to using DatabaseStorage instead of MemStorage
+export const storage = new DatabaseStorage();
