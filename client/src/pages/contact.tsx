@@ -103,7 +103,7 @@ export default function Contact() {
 
           <div className="mt-8 h-[300px] bg-muted rounded-lg overflow-hidden">
             <iframe
-              src={`https://www.gomaps.pro/geolocation/v1/geolocate?key=${import.meta.env.VITE_GOMAPS_API_KEY}&address=${encodeURIComponent(RESTAURANT_INFO.address)}`}
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(RESTAURANT_INFO.address)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
               width="100%"
               height="100%"
               style={{ border: 0 }}
